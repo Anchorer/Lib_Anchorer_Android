@@ -1,10 +1,3 @@
-/**---------------------------------------------------------------------
- * Utility: EncodeUtils
- * Description: 字符串工具，提供各种字符串操作相关的方法
- * 
- * Author: DuRuixue
- * Date: 2013-8-19
------------------------------------------------------------------------- */
 package com.anchorer.lib.utils;
 
 import android.annotation.SuppressLint;
@@ -24,7 +17,8 @@ import java.util.regex.Pattern;
 /**
  * Utils Class about encoding and decoding.
  *
- * Created by Anchorer/duruixue on 2014/8/15.
+ * Created by Anchorer/duruixue on 2013/8/19.
+ * @author Anchorer
  */
 public class EncodeUtils {
 	/**
