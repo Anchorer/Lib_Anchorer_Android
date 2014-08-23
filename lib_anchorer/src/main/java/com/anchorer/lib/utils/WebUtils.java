@@ -100,10 +100,23 @@ public class WebUtils {
      * @return True if enabled, otherwise False
 	 */
 	public static boolean isNetworkEnabled(Context context) {
-		ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         return info != null;
 	}
+
+    /**
+     * 判断是否是WIFI环境
+     * @param context   上下文对象
+     * @return True if Wifi is on, otherwise False
+     */
+    public static boolean isWifiNetwork(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        if(info != null && info.getType() == ConnectivityManager.TYPE_WIFI)
+            return true;
+        return false;
+    }
 	
 	/**
 	 * 打开浏览器浏览网页

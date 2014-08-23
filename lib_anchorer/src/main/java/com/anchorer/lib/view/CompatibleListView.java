@@ -13,9 +13,12 @@ import android.widget.ListView;
  * 				1. 能够兼容内部嵌套的ViewPager（横向滑动控件），能够解决由于嵌套带来的滑动冲突问题
  * 				2. 能够监测滑动到顶部和底部的事件。
  * 				3. 能够检测滑动到指定位置的事件。
+ * 			    4. 能够检测滑动状态改变的事件。
+ *
  * 				使用时需要注意：
  * 				1. （可选）如果要实现滑动到顶部或者底部的监听，则需要在目标组件中实现OnListViewBorderListener接口，并且调用CompatibleListView的initOnBorderListener()方法进行初始化。
  * 				2. （可选）如果要实现滑动到指定位置的监听，则需要在目标组件中实现onListViewSpecifiedListener接口，并且调用CompatibleListView的initOnSpecifiedHeightListener()方法进行初始化。
+ * 			    3. （可选）如果要实现滑动状态改变的监听，则需要在目标组件中实现OnListViewScrollStateChangedListener接口，并且调用CompatibleListView的initOnScrollStateChangeListener()方法进行初始化。
  *
  * Created by Anchorer/duruixue on 2014/8/16.
  * @author Anchorer
@@ -43,20 +46,33 @@ public class CompatibleListView extends ListView {
 	private int scrollSpecifiedState = SCROLL_STATE_SPECIFIED_TOP;
 	
 	private boolean isHorizontalMove = true;
-	
-	//公共接口：监听ListView滚动到上下边界
+
+    /**
+     * 公共接口：监听ListView滚动到上下边界
+     */
 	public static interface OnListViewBorderListener {
 		public void onBottom();
 		public void onTop();
 	}
 	private OnListViewBorderListener onBorderListener;
-	
-	//公共接口：监听ListView滚动到指定位置的上下方
+
+    /**
+     * 公共接口：监听ListView滚动到指定位置的上下方
+     */
 	public static interface OnListViewSpecifiedHeightListener {
 		public void onSpecifiedTop();
 		public void onSpecifiedBottom();
 	}
 	private OnListViewSpecifiedHeightListener onSpecifiedListener;
+
+    /**
+     * 公共接口：监听ListView滚动状态改变
+     */
+    public static interface OnListViewScrollStateChangedListener {
+        public void onStateChanged(AbsListView view, int state);
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount);
+    }
+    private OnListViewScrollStateChangedListener onStateChangedListener;
 	
 	public CompatibleListView(final Context context) {
 		super(context);
@@ -86,6 +102,9 @@ public class CompatibleListView extends ListView {
 		this.specifiedFirstVisibleItemPosition = specifiedFirstVisibleItemPosition;
 		this.specifiedFirstItemTopDistance = specifiedFirstItemTopDistance;
 	}
+    public void initOnScrollStateChangeListener(OnListViewScrollStateChangedListener listener) {
+        onStateChangedListener = listener;
+    }
     
 	/**
 	 * 监听器：滑动监听，监听ListView滑动到了顶部或底部
@@ -94,10 +113,16 @@ public class CompatibleListView extends ListView {
 		public CompatibleListViewScrollListener() {}
 		
 		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {}
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if(onStateChangedListener != null)
+                onStateChangedListener.onStateChanged(view, scrollState);
+        }
 		
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if(onStateChangedListener != null)
+                onStateChangedListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
 			/**
 			 * 判断滑到顶部或者底部
 			 */

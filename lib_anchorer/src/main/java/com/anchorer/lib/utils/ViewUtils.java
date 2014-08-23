@@ -193,8 +193,11 @@ public class ViewUtils {
      * dp ==> px
 	 */
 	public static int dp2px(Context context, float dpValue) {
-		final float scale = context.getResources().getDisplayMetrics().density;
-		return (int) (dpValue * scale + 0.5f);
+        if(context != null) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
+        }
+        return (int) dpValue;
 	}
 	
 	/**
