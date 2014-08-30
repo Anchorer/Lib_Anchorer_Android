@@ -1,10 +1,7 @@
 package com.anchorer.lib.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import android.text.TextUtils;
 
 /**
  * Utility: StringUtils
@@ -88,5 +85,19 @@ public class StringUtils {
 			return (int) mbVelocity + "MB/s";
 		return mbVelocity + "MB/s";
 	}
+
+    /**
+     * 将整形数组转换成字符串数组
+     *
+     * @param intArray  要转化的Integer数组
+     * @return  转化后的字符串数组
+     */
+    public static String[] getStringArrayFromIntArray(int[] intArray) {
+        String[] strArray = new String[intArray.length];
+        for(int i = 0; i < intArray.length; i++) {
+            strArray[i] = String.valueOf(intArray[i]);
+        }
+        return strArray;
+    }
 
 }

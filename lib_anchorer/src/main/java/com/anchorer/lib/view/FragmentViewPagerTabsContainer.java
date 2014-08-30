@@ -2,7 +2,6 @@ package com.anchorer.lib.view;
 
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -139,7 +138,7 @@ public class FragmentViewPagerTabsContainer {
 	/**
 	 * 监听器：监听ViewPager页面切换事件
 	 */
-	class ViewPagerChangeListener implements OnPageChangeListener {
+	class ViewPagerChangeListener implements ViewPager.OnPageChangeListener {
 		@Override
 		public void onPageScrollStateChanged(int state) {
 			if(preViewPagerState == ViewPager.SCROLL_STATE_SETTLING && state == ViewPager.SCROLL_STATE_IDLE) {
