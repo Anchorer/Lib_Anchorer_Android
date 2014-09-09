@@ -1,5 +1,7 @@
 package com.anchorer.lib.utils;
 
+import android.text.TextUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,6 +100,18 @@ public class StringUtils {
             strArray[i] = String.valueOf(intArray[i]);
         }
         return strArray;
+    }
+
+    /**
+     * 获取下载文件的扩展名
+     * @param downloadUrl   文件下载地址
+     */
+    public static String getFileSuffix(String downloadUrl) {
+        if(!TextUtils.isEmpty(downloadUrl)) {
+            int index = downloadUrl.lastIndexOf('.');
+            return downloadUrl.substring(index + 1, downloadUrl.length());
+        }
+        return null;
     }
 
 }

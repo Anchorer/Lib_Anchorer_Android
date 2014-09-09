@@ -104,7 +104,7 @@ public class FileCache {
 		File file = new File(cacheDir, fileName);
 		try {
 			if(!file.exists())
-				return null;
+				return "";
 			
 			FileInputStream inStream = new FileInputStream(file);
 			byte[] buffer = new byte[inStream.available()];

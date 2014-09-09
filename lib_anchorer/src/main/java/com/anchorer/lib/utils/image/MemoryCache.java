@@ -29,8 +29,8 @@ public class MemoryCache {
 	 * 初始化MemoryCache，设置最大允许使用的堆内存
 	 */
 	public MemoryCache() {
-		setLimit(Runtime.getRuntime().maxMemory() / 4);
-	} 
+		setLimit(Runtime.getRuntime().maxMemory() / 2);
+	}
 	
 	private void setLimit(long newLimit) {
 		this.limit = newLimit;

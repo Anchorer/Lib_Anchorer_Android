@@ -5,8 +5,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
+import com.anchorer.lib.utils.image.ImageUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 /**
  * AdvertSliderItem
@@ -45,7 +47,7 @@ public class AdvertSliderItem {
 	
 	public void setImageView(Context context, ImageLoader imageLoader, DisplayImageOptions options) {
 		this.imageView = new ImageView(context);
-		imageLoader.displayImage(imageUrl, imageView, options);
+		imageLoader.displayImage(imageUrl, new ImageViewAware(imageView, false), options, new ImageUtils.AnimateFirstDisplayListener());
 		imageView.setScaleType(ScaleType.CENTER_CROP);
 	}
 	
