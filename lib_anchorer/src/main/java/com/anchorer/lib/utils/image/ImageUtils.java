@@ -23,6 +23,8 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
@@ -55,6 +57,7 @@ public class ImageUtils {
 		if(roundPixel > 0) {
 			return new DisplayImageOptions.Builder()
 						.showImageForEmptyUri(defaultResId)
+                        .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
 						.showImageOnFail(defaultResId)
 						.showImageOnLoading(defaultResId)
 						.cacheInMemory(supportMemoryCache)
@@ -63,12 +66,14 @@ public class ImageUtils {
 						.considerExifParams(true).build();
 		} else {
 			return new DisplayImageOptions.Builder()
-			.showImageForEmptyUri(defaultResId)
-			.showImageOnFail(defaultResId)
-			.showImageOnLoading(defaultResId)
-			.cacheInMemory(supportMemoryCache)
-			.cacheOnDisc(supportSdcardCache)
-			.considerExifParams(true).build();
+                    .showImageForEmptyUri(defaultResId)
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                    .showImageOnFail(defaultResId)
+                    .showImageOnLoading(defaultResId)
+                    .cacheInMemory(supportMemoryCache)
+                    .cacheOnDisc(supportSdcardCache)
+                    .displayer(new FadeInBitmapDisplayer(300))
+                    .considerExifParams(true).build();
 		}
 	}
 	public static DisplayImageOptions getDisplayImageOptions(int defaultResId, int roundPixel) {

@@ -110,6 +110,7 @@ public class CompatibleListView extends ListView {
 	 * 监听器：滑动监听，监听ListView滑动到了顶部或底部
 	 */
 	public class CompatibleListViewScrollListener implements OnScrollListener {
+
 		public CompatibleListViewScrollListener() {}
 		
 		@Override

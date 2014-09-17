@@ -44,12 +44,15 @@ public class AdvertSliderItem {
 	private Advert advert;
 	
 	public AdvertSliderItem() {}
-	
-	public void setImageView(Context context, ImageLoader imageLoader, DisplayImageOptions options) {
+
+	public void setImageView(Context context, DisplayImageOptions options) {
 		this.imageView = new ImageView(context);
-		imageLoader.displayImage(imageUrl, new ImageViewAware(imageView, false), options, new ImageUtils.AnimateFirstDisplayListener());
 		imageView.setScaleType(ScaleType.CENTER_CROP);
 	}
+
+    public void displayImageView(Context context, DisplayImageOptions options) {
+        ImageLoader.getInstance().displayImage(imageUrl, new ImageViewAware(imageView, false), options, new ImageUtils.AnimateFirstDisplayListener());
+    }
 	
 	public int getLocation() {
 		return location;
