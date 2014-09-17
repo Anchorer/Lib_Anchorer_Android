@@ -12,6 +12,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.anchorer.lib.model.Advert;
 import com.anchorer.lib.model.AdvertSliderItem;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 /**
  * View: DefaultAdvertSlider
@@ -29,8 +31,8 @@ import com.anchorer.lib.model.AdvertSliderItem;
  */
 public class DefaultAdvertSlider extends ViewPager {
 	//数据源
-	private List<AdvertSliderItem> viewPagerListData;
-	
+	private List<AdvertSliderItem> mViewPagerListData;
+
 	//标题显示控件
 	private TextView titleView;
 	
@@ -40,7 +42,9 @@ public class DefaultAdvertSlider extends ViewPager {
 	
 	//图片填充方式
 	private ScaleType scaleType;
-	
+    private boolean displayAllAtFirst;
+    private DisplayImageOptions mImageOptions;
+
 	//自动轮播机制
 	private int currentItemPosition = 0;
 	private ScheduledExecutorService scheduledExecutorService;
@@ -63,17 +67,27 @@ public class DefaultAdvertSlider extends ViewPager {
 		super(context, attr);
 	}
 	
-	public void initSlider(OnClickDefaultAdvertSliderItemListener listener, List<AdvertSliderItem> viewPagerListData, TextView titleView, int defaultDotResOfNormal, int defaultDotResOfSelected, ScaleType scaleType) {
-		clickDefaultAdvertSliderItemListener = listener;
-		
-		this.viewPagerListData = viewPagerListData;
+	public void initSlider(OnClickDefaultAdvertSliderItemListener listener, List<AdvertSliderItem> viewPagerListData, DisplayImageOptions imageOptions, TextView titleView, int defaultDotResOfNormal, int defaultDotResOfSelected, ScaleType scaleType, boolean displayAllAtFirst) {
+		this.clickDefaultAdvertSliderItemListener = listener;
+		this.mViewPagerListData = viewPagerListData;
 		this.titleView = titleView;
 		this.defaultDotResOfNormal = defaultDotResOfNormal;
 		this.defaultDotResOfSelected = defaultDotResOfSelected;
+        this.mImageOptions = imageOptions;
 		this.scaleType = scaleType;
-		
+        this.displayAllAtFirst = displayAllAtFirst;
+
 		setAdapter(new DefaultSliderAdapter());
 		setOnPageChangeListener(new DefaultPageChangeListener());
+
+        if(mViewPagerListData != null && mViewPagerListData.size() > 0) {
+            if(!this.displayAllAtFirst) {
+                mViewPagerListData.get(0).displayImageView(getContext(), imageOptions);
+            } else {
+                for(AdvertSliderItem item : mViewPagerListData)
+                    item.displayImageView(getContext(), imageOptions);
+            }
+        }
 		
 		try {
 			Field mField = ViewPager.class.getDeclaredField("mScroller");
@@ -92,11 +106,14 @@ public class DefaultAdvertSlider extends ViewPager {
 		public void onPageSelected(int position) {
 			currentItemPosition = position;
 			
-			AdvertSliderItem item = viewPagerListData.get(position);
+			AdvertSliderItem item = mViewPagerListData.get(position);
+            if(!displayAllAtFirst) {
+                item.displayImageView(getContext(), mImageOptions);
+            }
 			if(titleView != null)
 				titleView.setText(item.getDisplayedTitle());
-			viewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
-			viewPagerListData.get(position).setDotBackgroundRes(defaultDotResOfSelected);
+            mViewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
+            mViewPagerListData.get(position).setDotBackgroundRes(defaultDotResOfSelected);
 			oldPos = position;
 		}
 		
@@ -112,12 +129,12 @@ public class DefaultAdvertSlider extends ViewPager {
 	private class DefaultSliderAdapter extends PagerAdapter {
 		@Override
 		public int getCount() {
-			return viewPagerListData.size();
+			return mViewPagerListData.size();
 		}
 		
 		@Override
 		public Object instantiateItem(View container, final int position) {
-			final AdvertSliderItem item = viewPagerListData.get(position);
+			final AdvertSliderItem item = mViewPagerListData.get(position);
 			ImageView itemImageView = item.getImageView();
 			itemImageView.setScaleType(scaleType);
 			
@@ -130,7 +147,12 @@ public class DefaultAdvertSlider extends ViewPager {
 					}
 				}
 			});
-			
+
+            ViewParent mParent = itemImageView.getParent();
+            if(mParent instanceof ViewPager) {
+                ((ViewPager) mParent).removeAllViews();
+            }
+
 			((ViewPager)container).addView(itemImageView);
 			return itemImageView;
 		}
@@ -206,24 +228,24 @@ public class DefaultAdvertSlider extends ViewPager {
 	 */
 	public void setTitleAndDot(int oldPos, int newPos) {
 		if(titleView != null)
-			titleView.setText(viewPagerListData.get(newPos).getDisplayedTitle());
-		if(oldPos >= 0 && viewPagerListData != null && oldPos < viewPagerListData.size())
-			viewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
-		if(newPos >= 0 && viewPagerListData != null && newPos < viewPagerListData.size())
-			viewPagerListData.get(newPos).setDotBackgroundRes(defaultDotResOfSelected);
+			titleView.setText(mViewPagerListData.get(newPos).getDisplayedTitle());
+		if(oldPos >= 0 && mViewPagerListData != null && oldPos < mViewPagerListData.size())
+            mViewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
+		if(newPos >= 0 && mViewPagerListData != null && newPos < mViewPagerListData.size())
+            mViewPagerListData.get(newPos).setDotBackgroundRes(defaultDotResOfSelected);
 	}
 	public void setTitleAndDot(int newPos) {
-		for(int i = 0; viewPagerListData != null && i < viewPagerListData.size(); i++) {
-			viewPagerListData.get(i).setDotBackgroundRes((newPos == i) ? defaultDotResOfSelected : defaultDotResOfNormal);
+		for(int i = 0; mViewPagerListData != null && i < mViewPagerListData.size(); i++) {
+            mViewPagerListData.get(i).setDotBackgroundRes((newPos == i) ? defaultDotResOfSelected : defaultDotResOfNormal);
 		}
 	}
 
 	public List<AdvertSliderItem> getViewPagerListData() {
-		return viewPagerListData;
+		return mViewPagerListData;
 	}
 
 	public void setViewPagerListData(List<AdvertSliderItem> viewPagerListData) {
-		this.viewPagerListData = viewPagerListData;
+		this.mViewPagerListData = viewPagerListData;
 	}
 
 	public TextView getTitleView() {
@@ -266,7 +288,7 @@ public class DefaultAdvertSlider extends ViewPager {
 	 * 递增当前页面位置的标记
 	 */
 	public void increaseCurrentItemPosition() {
-		currentItemPosition = (currentItemPosition + 1) % viewPagerListData.size();
+		currentItemPosition = (currentItemPosition + 1) % mViewPagerListData.size();
 	}
 	
 	/**
