@@ -84,7 +84,7 @@ public class ImageUtils {
 	 */
 	public static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
 		ImageLoader imageLoader = ImageLoader.getInstance();
-		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+		public static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
 		@Override
 		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 			if (loadedImage != null) {
