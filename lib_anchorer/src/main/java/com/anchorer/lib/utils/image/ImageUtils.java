@@ -72,7 +72,7 @@ public class ImageUtils {
                     .showImageOnLoading(defaultResId)
                     .cacheInMemory(supportMemoryCache)
                     .cacheOnDisc(supportSdcardCache)
-                    .displayer(new FadeInBitmapDisplayer(300))
+                    .displayer(new FadeInBitmapDisplayer(500))
                     .considerExifParams(true).build();
 		}
 	}
