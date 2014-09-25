@@ -258,7 +258,6 @@ public class CompatiblePinnedHeaderRefreshableListView extends CompatiblePinnedH
             mHeaderView.setVisibility(View.GONE);
         } else {
             mHeaderView.setVisibility(View.VISIBLE);
-            // TODO Custom text displays
             mTimeText.setText("上次更新：" + SystemUtils.getLastUpdateTimeHintStr(getLastUpdateInterval()));
         }
 
