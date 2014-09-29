@@ -82,7 +82,7 @@ public class AutoCompleteTextViewWithClearView {
 	 * 获取输入框中的内容
 	 */
 	public String getText() {
-		return editText.getText().toString();
+		return editText.getText().toString().trim();
 	}
 	
 	/**
