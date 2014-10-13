@@ -2,6 +2,7 @@ package com.anchorer.lib.utils.image;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.StatFs;
 
 import com.anchorer.lib.consts.LibConst;
 
@@ -119,5 +120,16 @@ public class FileCache {
 		
 		return content;
 	}
+
+    /**
+     * 获取存储空间剩余大小，单位为B
+     */
+    public static long getAvailableSize() {
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSizeLong();
+        long availableBlocks = stat.getAvailableBlocksLong();
+        return blockSize * availableBlocks;
+    }
 
 }
