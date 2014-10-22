@@ -4,20 +4,13 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.util.Base64;
-import android.util.Log;
 
 import com.anchorer.lib.consts.LibConst;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -150,12 +143,12 @@ public class EncodeUtils {
 	}
 
 
-    public static void testForRSA() throws NoSuchAlgorithmException {
+   /* public static void testForRSA() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPaireGen = KeyPairGenerator.getInstance("RSA");
         keyPaireGen.initialize(2048);
         KeyPair keyPair = keyPaireGen.generateKeyPair();
         PublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         PrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-    }
+    }*/
 	
 }
