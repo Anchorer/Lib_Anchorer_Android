@@ -16,6 +16,7 @@ public class LibConst {
      * Encoding Type
      */
     public static final String ENCODING_UTF_8 = "UTF-8";
+    public static final String ENCODING_UTF_16 = "UTF-16";
 
     /**
      * 常用时间戳，单位：s
