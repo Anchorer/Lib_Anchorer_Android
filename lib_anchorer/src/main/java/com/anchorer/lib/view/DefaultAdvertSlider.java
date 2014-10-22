@@ -1,11 +1,5 @@
 package com.anchorer.lib.view;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -19,8 +13,16 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 import com.anchorer.lib.model.Advert;
-import com.anchorer.lib.model.AdvertSliderItem;
+import com.anchorer.lib.utils.image.ImageUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * View: DefaultAdvertSlider
@@ -31,18 +33,18 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
  */
 public class DefaultAdvertSlider extends ViewPager {
 	//数据源
-	private List<AdvertSliderItem> mViewPagerListData;
+	private List<Advert> mViewPagerListData;
 
 	//标题显示控件
 	private TextView titleView;
 	
 	//小圆点显示
+    private List<View> dotViews;
 	private int defaultDotResOfNormal;
 	private int defaultDotResOfSelected;
 	
 	//图片填充方式
 	private ScaleType scaleType;
-    private boolean displayAllAtFirst;
     private DisplayImageOptions mImageOptions;
 
 	//自动轮播机制
@@ -55,7 +57,7 @@ public class DefaultAdvertSlider extends ViewPager {
 	
 	//公共接口：轮播项的点击监听事件
 	public interface OnClickDefaultAdvertSliderItemListener {
-		public void clickDefaultAdvertSliderItem(int type, int location, int advertId, String title, String imageUrl, int linkid, Advert advert, String url);
+		public void clickDefaultAdvertSliderItem(int id, String title, String link);
 	}
 	private OnClickDefaultAdvertSliderItemListener clickDefaultAdvertSliderItemListener;
 	
@@ -66,29 +68,25 @@ public class DefaultAdvertSlider extends ViewPager {
 	public DefaultAdvertSlider(Context context, AttributeSet attr) {
 		super(context, attr);
 	}
-	
-	public void initSlider(OnClickDefaultAdvertSliderItemListener listener, List<AdvertSliderItem> viewPagerListData, DisplayImageOptions imageOptions, TextView titleView, int defaultDotResOfNormal, int defaultDotResOfSelected, ScaleType scaleType, boolean displayAllAtFirst) {
+
+    public void initSlider(OnClickDefaultAdvertSliderItemListener listener, List<Advert> viewPagerListData, DisplayImageOptions imageOptions) {
+        initSlider(listener, viewPagerListData, imageOptions, null, null, -1, -1, ScaleType.CENTER_CROP);
+    }
+
+	public void initSlider(OnClickDefaultAdvertSliderItemListener listener, List<Advert> viewPagerListData, DisplayImageOptions imageOptions,
+                           TextView titleView, List<View> dotViews, int defaultDotResOfNormal, int defaultDotResOfSelected, ScaleType scaleType) {
 		this.clickDefaultAdvertSliderItemListener = listener;
 		this.mViewPagerListData = viewPagerListData;
+        this.mImageOptions = imageOptions;
 		this.titleView = titleView;
+        this.dotViews = dotViews;
 		this.defaultDotResOfNormal = defaultDotResOfNormal;
 		this.defaultDotResOfSelected = defaultDotResOfSelected;
-        this.mImageOptions = imageOptions;
 		this.scaleType = scaleType;
-        this.displayAllAtFirst = displayAllAtFirst;
 
 		setAdapter(new DefaultSliderAdapter());
 		setOnPageChangeListener(new DefaultPageChangeListener());
 
-        if(mViewPagerListData != null && mViewPagerListData.size() > 0) {
-            if(!this.displayAllAtFirst) {
-                mViewPagerListData.get(0).displayImageView(getContext(), imageOptions);
-            } else {
-                for(AdvertSliderItem item : mViewPagerListData)
-                    item.displayImageView(getContext(), imageOptions);
-            }
-        }
-		
 		try {
 			Field mField = ViewPager.class.getDeclaredField("mScroller");
 			mField.setAccessible(true);
@@ -100,21 +98,23 @@ public class DefaultAdvertSlider extends ViewPager {
 	}
 	
 	private class DefaultPageChangeListener implements OnPageChangeListener {
-		private int oldPos = 0;
 
 		@Override
 		public void onPageSelected(int position) {
 			currentItemPosition = position;
 			
-			AdvertSliderItem item = mViewPagerListData.get(position);
-            if(!displayAllAtFirst) {
-                item.displayImageView(getContext(), mImageOptions);
-            }
+			Advert ad = mViewPagerListData.get(position);
 			if(titleView != null)
-				titleView.setText(item.getDisplayedTitle());
-            mViewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
-            mViewPagerListData.get(position).setDotBackgroundRes(defaultDotResOfSelected);
-			oldPos = position;
+                titleView.setText(ad.getTitle());
+
+            if(dotViews != null) {
+                for(int i = 0; i < dotViews.size(); i++) {
+                    if(i == position)
+                        dotViews.get(i).setBackgroundResource(defaultDotResOfSelected);
+                    else
+                        dotViews.get(i).setBackgroundResource(defaultDotResOfNormal);
+                }
+            }
 		}
 		
 		@Override
@@ -134,8 +134,8 @@ public class DefaultAdvertSlider extends ViewPager {
 		
 		@Override
 		public Object instantiateItem(View container, final int position) {
-			final AdvertSliderItem item = mViewPagerListData.get(position);
-			ImageView itemImageView = item.getImageView();
+            final Advert ad = mViewPagerListData.get(position);
+            ImageView itemImageView = new ImageView(getContext());
 			itemImageView.setScaleType(scaleType);
 			
 			//为每一个轮播图片设置点击监听
@@ -143,10 +143,11 @@ public class DefaultAdvertSlider extends ViewPager {
 				@Override
 				public void onClick(View v) {
 					if(clickDefaultAdvertSliderItemListener != null) {
-						clickDefaultAdvertSliderItemListener.clickDefaultAdvertSliderItem(item.getType(), position + 1, item.getAdvertId(), item.getTitle(), item.getImageUrl(), item.getLinkid(), item.getAdvert(), item.getUrl());
+                        clickDefaultAdvertSliderItemListener.clickDefaultAdvertSliderItem(ad.getId(), ad.getTitle(), ad.getLink());
 					}
 				}
 			});
+            ImageLoader.getInstance().displayImage(ad.getImageUrl(), new ImageViewAware(itemImageView, false), mImageOptions, new ImageUtils.AnimateFirstDisplayListener());
 
             ViewParent mParent = itemImageView.getParent();
             if(mParent instanceof ViewPager) {
@@ -221,30 +222,11 @@ public class DefaultAdvertSlider extends ViewPager {
 		return viewPagerScrollState == ViewPager.SCROLL_STATE_SETTLING;
 	}
 	
-	/**
-	 * 设置相应newPos位置的标题和小圆点，并且将原来位置的小圆点变暗
-	 * @param oldPos	原位置
-	 * @param newPos	新位置
-	 */
-	public void setTitleAndDot(int oldPos, int newPos) {
-		if(titleView != null)
-			titleView.setText(mViewPagerListData.get(newPos).getDisplayedTitle());
-		if(oldPos >= 0 && mViewPagerListData != null && oldPos < mViewPagerListData.size())
-            mViewPagerListData.get(oldPos).setDotBackgroundRes(defaultDotResOfNormal);
-		if(newPos >= 0 && mViewPagerListData != null && newPos < mViewPagerListData.size())
-            mViewPagerListData.get(newPos).setDotBackgroundRes(defaultDotResOfSelected);
-	}
-	public void setTitleAndDot(int newPos) {
-		for(int i = 0; mViewPagerListData != null && i < mViewPagerListData.size(); i++) {
-            mViewPagerListData.get(i).setDotBackgroundRes((newPos == i) ? defaultDotResOfSelected : defaultDotResOfNormal);
-		}
-	}
-
-	public List<AdvertSliderItem> getViewPagerListData() {
+	public List<Advert> getViewPagerListData() {
 		return mViewPagerListData;
 	}
 
-	public void setViewPagerListData(List<AdvertSliderItem> viewPagerListData) {
+	public void setViewPagerListData(List<Advert> viewPagerListData) {
 		this.mViewPagerListData = viewPagerListData;
 	}
 

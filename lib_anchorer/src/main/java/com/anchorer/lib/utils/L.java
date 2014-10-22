@@ -9,7 +9,7 @@ import android.util.Log;
  */
 public class L {
 
-    public static boolean DEBUG = true;
+    public static volatile boolean DEBUG = true;
 
     /**
      * Enable Logger
