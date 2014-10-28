@@ -3,7 +3,7 @@ package com.anchorer.lib.utils;
 import android.util.Log;
 
 /**
- * Log Manager Util.
+ * Logger Util.
  *
  * Created by Anchorer/duruixue on 2014/10/22.
  */
