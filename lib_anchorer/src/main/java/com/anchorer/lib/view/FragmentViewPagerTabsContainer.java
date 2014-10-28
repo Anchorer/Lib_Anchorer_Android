@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class FragmentViewPagerTabsContainer {
 	// 该Tabs框架所包含的Tabs
-	private List<List<FragmentViewPagerTab>> mTabViews;
+	private List<FragmentViewPagerTab> mTabViews;
 	
 	// 该Tabs框架内控制页面切换的ViewPager
 	private ViewPager mViewPager;
@@ -45,7 +45,7 @@ public class FragmentViewPagerTabsContainer {
      * @param listener  FragmentViewPagerTabsChangeListener，监听Tab的切换事件
 	 */
 	public FragmentViewPagerTabsContainer(ViewPager viewPager, int viewPagerOffScreenLimit, FragmentPagerAdapter adapter, FragmentViewPagerTabsChangeListener listener) {
-		mTabViews = new ArrayList<List<FragmentViewPagerTab>>();
+		mTabViews = new ArrayList<FragmentViewPagerTab>();
 		this.mViewPager = viewPager;
 		this.mViewPager.setOffscreenPageLimit(viewPagerOffScreenLimit);
 		if(adapter != null)
@@ -58,15 +58,11 @@ public class FragmentViewPagerTabsContainer {
 	 * （必选项）
 	 * 添加Tab，该Tab的布局由应用程序自定义
 	 */
-	public void addTabViews(int position, FragmentViewPagerTab tabView) {
+    public void addTabViews(FragmentViewPagerTab tabView) {
 		if(mTabViews == null)
-			mTabViews = new ArrayList<List<FragmentViewPagerTab>>();
-		tabView.setOnClickListener(new SelectTabListener(position));
-		
-		while(mTabViews.size() <= position) {
-			mTabViews.add(new ArrayList<FragmentViewPagerTab>());
-		}
-		mTabViews.get(position).add(tabView);
+			mTabViews = new ArrayList<FragmentViewPagerTab>();
+        tabView.setOnClickListener(new SelectTabListener(mTabViews.size()));
+        mTabViews.add(tabView);
 	}
 	
 	/**
@@ -125,13 +121,11 @@ public class FragmentViewPagerTabsContainer {
 	
 	private void setUI(int position, boolean selected) {
 		if(position >= 0 && position < mTabViews.size()) {
-			List<FragmentViewPagerTab> tabs = mTabViews.get(position);
-            for(FragmentViewPagerTab tab : tabs) {
-                if(selected)
-                    tab.setUIForSelected();
-                else
-                    tab.setUIForUnSelected();
-            }
+            FragmentViewPagerTab tab = mTabViews.get(position);
+            if(selected)
+                tab.setUIForSelected();
+            else
+                tab.setUIForUnSelected();
 		}
 	}
 	
