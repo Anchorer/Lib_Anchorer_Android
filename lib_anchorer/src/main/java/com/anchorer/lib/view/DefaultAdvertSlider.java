@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
+import com.anchorer.lib.consts.LibConst;
 import com.anchorer.lib.model.Advert;
+import com.anchorer.lib.utils.L;
 import com.anchorer.lib.utils.image.ImageUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -93,7 +95,7 @@ public class DefaultAdvertSlider extends ViewPager {
 			mScroller = new FixedSpeedScroller(getContext(), new LinearInterpolator());
 			mField.set(this, mScroller);
 		} catch(Exception e) {
-			e.printStackTrace();
+            L.e(LibConst.LOG, "DefaultAdvertSlider -- initSlider Exception", e);
 		}
 	}
 	

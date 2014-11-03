@@ -170,7 +170,7 @@ public class SystemUtils {
 				Date date = new SimpleDateFormat(format).parse(dateStr);
 				return date.getTime();
 			} catch (ParseException e) {
-				e.printStackTrace();
+                L.e(LibConst.LOG, "SystemUtils getTimeStampFromDateTime ParseException. [dateStr: " + dateStr + ", format:" + format + "]", e);
 				return 0;
 			}
 		}
@@ -249,7 +249,7 @@ public class SystemUtils {
             	apiKey = metaData.getString(metaKey);
             }
         } catch (NameNotFoundException e) {
-        	e.printStackTrace();
+            L.e(LibConst.LOG, "SystemUtils -- getMetaValue NameNotFoundException", e);
         }
         return apiKey;
     }

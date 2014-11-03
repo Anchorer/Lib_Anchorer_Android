@@ -25,6 +25,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
+import com.anchorer.lib.consts.LibConst;
+
 import java.io.FileNotFoundException;
 
 /**
@@ -115,7 +117,7 @@ public class ViewUtils {
 		try {
 			bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
 		} catch(FileNotFoundException e) {
-			e.printStackTrace();
+            L.e(LibConst.LOG, "ViewUtils -- decodeUriAsBitmap FileNotFoundException", e);
 			return null;
 		}
 		return bitmap;

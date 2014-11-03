@@ -6,6 +6,9 @@ package com.anchorer.lib.consts;
  * Created by Anchorer/duruixue on 2014/8/15.
  */
 public class LibConst {
+
+    public static final String LOG = "log";
+
     /**
      * Internet Connection
      */

@@ -8,6 +8,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
+import com.anchorer.lib.consts.LibConst;
+import com.anchorer.lib.utils.L;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -173,9 +175,9 @@ public class ImageUtils {
             stream2.close();
             return bitmap;
         } catch (FileNotFoundException e) {
-        	e.printStackTrace();
+            L.e(LibConst.LOG, "ImageUtils -- decodeFile FileNotFoundException", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            L.e(LibConst.LOG, "ImageUtils -- decodeFile IOException", e);
         }
         return null;
     }
@@ -195,7 +197,7 @@ public class ImageUtils {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            L.e(LibConst.LOG, "ImageUtils -- copyStream Exception", e);
         }
     }
 }

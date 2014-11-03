@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.anchorer.lib.consts.LibConst;
+import com.anchorer.lib.utils.L;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -86,7 +87,7 @@ public class FileCache {
 			outStream.write(buffer);
 			outStream.close();
 		} catch(Exception e) {
-			e.printStackTrace();
+            L.e(LibConst.LOG, "FileCache -- writeStrToFile Exception", e);
 		}
 	}
 	
@@ -115,7 +116,7 @@ public class FileCache {
 			
 			return content;
 		} catch(Exception e) {
-			e.printStackTrace();
+            L.e(LibConst.LOG, "FileCache -- readStrFromFile Exception", e);
 		}
 		
 		return content;
