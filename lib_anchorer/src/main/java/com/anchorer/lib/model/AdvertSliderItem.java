@@ -1,15 +1,5 @@
 package com.anchorer.lib.model;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-
-import com.anchorer.lib.utils.image.ImageUtils;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
-
 /**
  * AdvertSliderItem
  * 表示一个轮播项，用于{@link com.anchorer.lib.view.DefaultAdvertSlider}轮播控件。
