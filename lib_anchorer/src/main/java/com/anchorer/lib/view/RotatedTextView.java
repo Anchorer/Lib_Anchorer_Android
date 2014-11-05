@@ -14,7 +14,7 @@ import android.widget.TextView;
  */
 public class RotatedTextView extends TextView {
     //倾斜角度，默认45度
-    private int rotateDegree = 45;
+    private int rotateDegree = -45;
 	
 	public RotatedTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);

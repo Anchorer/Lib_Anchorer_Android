@@ -97,7 +97,16 @@ public class EditTextWithClearView {
 	public void setFocusable(boolean focusable) {
 		editText.setFocusable(focusable);
 	}
-	
+
+    /**
+     * 为输入框获取焦点
+     */
+    public void requestFocus() {
+        if(editText != null) {
+            editText.requestFocus();
+        }
+    }
+
 	/**
 	 * 为ClearView设置可见性
 	 */
