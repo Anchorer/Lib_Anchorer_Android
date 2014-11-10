@@ -265,7 +265,19 @@ public class ViewUtils {
 		if(dialog != null && dialog.isShowing())
 			dialog.dismiss();
 	}
-	
+
+    /**
+     * 创建一个ProgressDialog并显示在屏幕上，该ProgressDialog支持点击周围区域dismiss
+     * @param context   上下文
+     * @param title     标题
+     * @param message   内容
+     */
+    public static ProgressDialog showProgressDialog(Context context, String title, String message) {
+        ProgressDialog dialog = ProgressDialog.show(context, title, message);
+        dialog.setCancelable(true);
+        return dialog;
+    }
+
 	/**
 	 * 消除掉PopupWindow
      * Dismiss PopupWindow
