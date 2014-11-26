@@ -45,7 +45,41 @@ public class EncodeUtils {
 		}
 		return hex.toString();
 	}
-	
+
+    /**
+     * SHA1加密
+     * @param content   待加密字符串
+     * @return
+     */
+    public static String sha1(String content) {
+        if(content == null) {
+            L.w(LibConst.LOG, "EncodeUtils -- SHA1: content is null.");
+            return "";
+        }
+
+        try {
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance("SHA-1");
+            digest.update(content.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            // 字节数组转换为 十六进制 数
+            for (int i = 0; i < messageDigest.length; i++) {
+                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 	/**
 	 * 使用Base64算法对字符串加密
      * Encode String by Base64
@@ -67,7 +101,7 @@ public class EncodeUtils {
 			return null;
 		return new String(Base64.encode(byteArray, Base64.DEFAULT));
 	}
-	
+
 	/**
 	 * 使用Base64算法对字符串进行解密
 	 * @param 	encodedStr		加密后的字符串
@@ -82,7 +116,7 @@ public class EncodeUtils {
 		byte[] result = Base64.decode(encodedStr, Base64.DEFAULT);
 		return new String(result, encodingType);
 	}
-	
+
 	/**
 	 * 对Bitmap对象使用Base64进行加密
      * Encode Bitmap object by Base64
@@ -97,7 +131,7 @@ public class EncodeUtils {
 		byte[] bytes = stream.toByteArray();
 		return encodeWithBase64(bytes);
 	}
-	
+
 	/**
 	 * 从Bitmap图片对象获取其码流
      * Get byte array stream from Bitmap object
@@ -109,7 +143,7 @@ public class EncodeUtils {
 		bitmap.compress(CompressFormat.JPEG, 100, stream);
 		return stream.toByteArray();
 	}
-	
+
 	/**
 	 * 将String字符串转换成Unicode
      * String ==> Unicode
@@ -124,7 +158,7 @@ public class EncodeUtils {
         }
         return strBuilder.toString();
 	}
-	
+
 	/**
 	 * 将Unicode转换成String字符串
      * Unicode ==> String
@@ -141,6 +175,7 @@ public class EncodeUtils {
         }
         return str;
 	}
+
 
 
    /* public static void testForRSA() throws NoSuchAlgorithmException {
