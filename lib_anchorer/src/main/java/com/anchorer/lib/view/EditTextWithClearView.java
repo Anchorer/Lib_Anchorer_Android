@@ -51,7 +51,7 @@ public class EditTextWithClearView {
     private void initClearView() {
         String content = editText.getText().toString();
         if(TextUtils.isEmpty(content))
-            clearView.setVisibility(View.GONE);
+            clearView.setVisibility(View.INVISIBLE);
         else
             clearView.setVisibility(View.VISIBLE);
     }
@@ -70,7 +70,7 @@ public class EditTextWithClearView {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String content = s.toString();
             if(TextUtils.isEmpty(content)) {
-                clearView.setVisibility(View.GONE);
+                clearView.setVisibility(View.INVISIBLE);
             } else {
                 clearView.setVisibility(View.VISIBLE);
             }
@@ -88,7 +88,7 @@ public class EditTextWithClearView {
         @Override
         public void onClick(View v) {
             editText.setText("");
-            clearView.setVisibility(View.GONE);
+            clearView.setVisibility(View.INVISIBLE);
         }
     }
 
