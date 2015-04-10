@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Lib_Anchorer_Android.iml" filepath="$PROJECT_DIR$/Lib_Anchorer_Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib_anchorer/lib_anchorer.iml" filepath="$PROJECT_DIR$/lib_anchorer/lib_anchorer.iml" />
     </modules>
   </component>
 </project>
