@@ -49,7 +49,6 @@ public class EncodeUtils {
     /**
      * SHA1加密
      * @param content   待加密字符串
-     * @return
      */
     public static String sha1(String content) {
         if(content == null) {
