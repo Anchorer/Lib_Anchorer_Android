@@ -8,7 +8,7 @@ android {
     buildToolsVersion '22.0.0'
     resourcePrefix "lib_anchorer_"
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 9
         targetSdkVersion 21
         versionCode 1
         versionName '1.0.0'
@@ -27,7 +27,7 @@ dependencies {
 
 def siteUrl = 'https://github.com/Anchorer/Lib_Anchorer_Android'    // 项目主页
 def gitUrl = 'https://github.com/Anchorer/Lib_Anchorer_Android.git' // Git Url
-group = 'com.anchorer.lib'
+group = 'org.anchorer.lib'
 install {
     repositories.mavenInstaller {
         pom {
@@ -72,6 +72,15 @@ task javadoc(type: Javadoc) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+    }
 }
 
 artifacts {
