@@ -2,14 +2,14 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.0"
+version = "1.0.1"
 android {
-    compileSdkVersion 21
-    buildToolsVersion '22.0.0'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
     resourcePrefix "lib_anchorer_"
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName '1.0.0'
     }
@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:support-v4:22.2.1'
 }
 
 def siteUrl = 'https://github.com/Anchorer/Lib_Anchorer_Android'    // 项目主页
