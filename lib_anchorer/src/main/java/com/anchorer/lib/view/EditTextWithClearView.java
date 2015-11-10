@@ -1,4 +1,4 @@
-package com.anchorer.lib.view;
+package com.wisezone.android.common.view;
 
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,6 +24,7 @@ public class EditTextWithClearView {
 
     public interface EditTextCallback {
         void onTextChanged(View v, String s);
+        void onClearText();
     }
     private EditTextCallback mCallback;
 
@@ -89,6 +90,9 @@ public class EditTextWithClearView {
         public void onClick(View v) {
             editText.setText("");
             clearView.setVisibility(View.INVISIBLE);
+            if (mCallback != null) {
+                mCallback.onClearText();
+            }
         }
     }
 
@@ -169,6 +173,15 @@ public class EditTextWithClearView {
      */
     public EditText getEditText() {
         return editText;
+    }
+
+    /**
+     * 清除焦点
+     */
+    public void clearFocus() {
+        if (editText != null) {
+            editText.clearFocus();
+        }
     }
 
 }
