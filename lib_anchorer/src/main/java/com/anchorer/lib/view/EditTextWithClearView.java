@@ -1,4 +1,4 @@
-package com.wisezone.android.common.view;
+package com.anchorer.lib.view;
 
 import android.text.Editable;
 import android.text.TextUtils;
