@@ -1,15 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 version = "1.0.3"
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
-    resourcePrefix "lib_anchorer_"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 1
         versionName '1.0.0'
     }
@@ -22,84 +19,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:22.2.1'
-}
-
-def siteUrl = 'https://github.com/Anchorer/Lib_Anchorer_Android'    // 项目主页
-def gitUrl = 'https://github.com/Anchorer/Lib_Anchorer_Android.git' // Git Url
-group = 'org.anchorer.lib'
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name 'Android Library Developed by Anchorer'    // 项目描述
-                url siteUrl
-                // Set license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'duruixue'
-                        name 'Anchorer'
-                        email 'anchorer.du@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-javadoc {
-    options {
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        author true
-        version true
-    }
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "Lib_Anchorer_Android"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
+    compile 'com.android.support:support-v4:25.2.0'
 }
